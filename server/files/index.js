@@ -63,6 +63,11 @@ function loadMovies(genre) {
   const url = new URL("/movies", location.href)
   /* Task 1.4. Add query parameter to the url if a genre is given */
 
+  if (genre) {
+    // This turns /movies into /movies?genre=Action
+    url.searchParams.set("genre", genre); 
+  }
+  
   xhr.open("GET", url)
   xhr.send()
 }
@@ -77,7 +82,33 @@ window.onload = function () {
          initialize them with a click handler that calls the 
          loadMovies(...) function above. */
       const genres = JSON.parse(xhr.responseText);
+      // --- 1. Create the "All Movies" button first ---
+      const allLi = document.createElement("li");
+      const allBtn = document.createElement("button");
+      allBtn.textContent = "All Genres";
 
+      // When clicked, call loadMovies() with nothing (shows all)
+      allBtn.onclick = () => loadMovies(); 
+      
+      allLi.append(allBtn);
+      listElement.append(allLi);
+
+      // --- 2. Loop through the genres from the server ---
+      genres.forEach(genre => {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.textContent = genre;
+        
+        // When clicked, call loadMovies and tell it WHICH genre
+        btn.onclick = () => loadMovies(genre); 
+        
+        li.append(btn);
+        listElement.append(li);
+      });
+
+
+      // --- 3. Initial Load ---
+      // This automatically "clicks" the first button so the page isn't empty when it starts
       /* When a first button exists, we click it to load all movies. */
       const firstButton = document.querySelector("nav button");
       if (firstButton) {

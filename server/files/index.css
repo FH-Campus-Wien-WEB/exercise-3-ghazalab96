@@ -1,77 +1,213 @@
 @import url(base.css);
 
 h1 {
-  font-size: 200%;
-  margin: 8px 0px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
 }
 
-/* Constrain the page to the viewport */
-html, body {
-  height: 100vh;
-}
+body {
+  /* old styles */
+  font-family: 'Trebuchet MS', sans-serif;
+  background-color: #81aeca;
 
-/* Center the nav's header and list */
-nav {
+  /* The important new logic */
+  height: 100vh; 
+  margin: 0; /* Reset this to 0 as suggested in Task 3 to avoid bugs */
   display: flex;
   flex-direction: column;
-  align-items: center;
+}   
+
+
+/* Constrain the page to the viewport */
+html {
+  height: 100vh; /* Ensures the root is full screen */
+}
+
+
+/* Task 2.1. Lay out the childs of the 'body' using Grid Template Areas. */
+/* Center the nav's header and list */
+/* --- 1. NAV CONTAINER (The Room) --- */
+nav {
+  grid-area: n;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.1); /* Optional: just to see the area */
+}
+
+
+/* Task 3.2. Make the list items of the unordered list in the nav element a flex container, 
+   use column direction and center the child items
+ */
+/* Basic look for all nav buttons */
+
+/* --- 2. NAV LIST (The Mobile-First Layout) --- */
+nav ul {
+  display: flex;
+  flex-direction: row;  /* Mobile: Horizontal row */
+  flex-wrap: wrap;      /* ADD THIS: This stops them from going "out of page" */
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  margin: 0;
+  list-style-type: none;
 }
 
 /* navigation buttons have full width */
+/* --- 3. NAV BUTTONS (The Base Look) --- */
 nav button {
-  width: 100%;
+  background-color: #bbdcdc;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 18px;
+  white-space: nowrap; 
+  transition: 0.2s;
+}
+
+nav button:hover {
+  background-color: #b4afe0;
+}
+
+/* --- 4. DESKTOP OVERRIDES (The Grid & Sidebar) --- */
+@media (min-width: 800px) {
+  body {
+    display: grid;
+    /* The Map: 2 columns, 3 rows */
+    grid-template-areas: 
+      "h h"   /* Header spans both columns */
+      "n m"   /* Nav on left, Main on right */
+      "f f";  /* Footer spans both columns */
+
+    /* Column 1 (Nav) is 200px, Column 2 (Main) takes the rest (1fr) */
+    grid-template-columns: 200px 1fr;
+
+    /* Row 2 (Main) stretches to fill the screen (1fr) */
+    grid-template-rows: auto 1fr auto;
+  }
+
+  nav ul {
+    flex-direction: column; /* Desktop: Vertical column */
+    flex-wrap: nowrap;     /* No wrapping needed in sidebar */
+    align-items: stretch;
+    padding: 15px;
+  }
+
+  nav button {
+    width: 100%; /* Buttons fill the 200px sidebar width */
+  }
 }
 
 /* Remove unnecessary space and bullets from the lists */
 ul {
   padding: 0px;
   margin: 16px;
+  margin-top: 0;
+  margin-bottom: 12px;
+  padding-left: 20px;
   list-style-type: none;
 }
-
-/* Task 2.1. Lay out the childs of the 'body' using Grid Template Areas. */
-
 
 /* Task 3.1. Make the header element a flex container and center its children
    vertically and horizontally.
  */
+header { 
+  grid-area: h;
+  display: flex;
+  justify-content: center; /* Horizontal center */
+  align-items: center;     /* Vertical center */   
+}
 
 
-/* Task 3.2. Make the list items of the unordered list in the nav element a flex container, 
-   use column direction and center the child items
- */
 
 /* Task 3.3. Make the main element a Flexbox container */
 
+main   {
+  grid-area: m; 
+  display: flex;
+  flex-wrap: wrap; /* This is the magic word! It lets movies sit side-by-side */
+  grid-area: m; 
+  justify-content: center; /* Centers the movies in the middle of the screen */
+  overflow-y: auto; /* This creates the internal scrollbar! */
+  gap: 20px;            /* Adds nice breathing room between the movie cards */
+  padding: 20px;
+}
 
 /* Task 3.4. Make the footer's ul a Flexbox container */
-
+footer {
+  grid-area: f; 
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
 
 /* From here on styling from exercise 1 */
 img {
-  border-radius: 12px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin-bottom: 16px;
+  border: 2px solid #d9d9d9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.50);
+  transition: 0.2s;
+}
+
+img:hover {
+  box-shadow: 0 8px 18px rgba(23, 25, 179, 0.50);
 }
 
 article {
-  background-color: lightgray;
-  border-radius: 16px;
+  position: relative;
+  background-color:  rgb(216, 228, 231);
+  border-radius: 12px;
   padding: 16px;
-  width: 384px;
+  width: 350px;
   margin: 8px;
+  box-sizing: border-box;
+  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.08);
 }
 
 a {
-  color: beige;
+  color: rgb(95, 197, 180);
 }
 
 span {
-  margin-right: 4px;
+  margin-right: 8px;
 }
 
 .genre {
+  background-color: #8fadf8;
   padding: 4px 8px;
-  border: solid black 1px;
-  border-radius: 6px;
-  background-color: darkgray;
-  font-weight: bold;
+  border-radius: 8px;
+  margin: 4px;
+  display: inline-block;
+  transition: background-color 0.2s ease;
 }
+
+
+.genre:hover {
+  background-color: #8e9cbe;
+}
+
+/* This ONLY affects the Edit buttons inside the movies */
+article button {
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: rgb(87, 194, 194);
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  position: absolute; 
+  bottom: 15px;           
+  right: 15px; /* Adjusted slightly */
+}
+
+button:hover {
+  background-color: #b4afe0;
+  transition: 0.2s;
+}
+
+
